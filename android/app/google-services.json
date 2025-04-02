@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "959260074803",
+    "project_id": "grupo-eff55",
+    "storage_bucket": "grupo-eff55.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959260074803:android:9c6ef584d416b3198a5446",
+        "android_client_info": {
+          "package_name": "com.upt.grupo_estudio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdeDg50R1rvtyaGRuZNkWLxG7NxeInDtM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
