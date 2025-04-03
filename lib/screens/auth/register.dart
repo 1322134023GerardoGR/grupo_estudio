@@ -2,7 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'activities.dart';
+import '../activities/activities.dart';
+import '../../services/auth_service.dart';
+
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -13,30 +15,25 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  final AuthService _auth = AuthService();
 
   Future<void> _register() async {
     try {
-      // Crea el usuario con correo y contraseña
-      final userCredential = await _auth.createUserWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
+      User? user = await _auth.signUp(
+        _emailController.text,
+        _passwordController.text,
       );
-      // Al registrar se asigna el rol "alumno" por defecto en Firestore
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userCredential.user!.uid)
-          .set({
-        'role': 'alumno',
-        'email': _emailController.text,
-      });
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) =>  ActivitiesPage()),
-      );
+
+      if (user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => ActivitiesPage()),
+        );
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error en el registro')),
+        SnackBar(content: Text(e.toString())),
       );
     }
   }
