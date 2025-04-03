@@ -12,6 +12,25 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
+  Future<bool?> _showLogoutDialog(BuildContext context) async {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Cerrar Sesión'),
+        content: const Text('¿Estás seguro de que quieres cerrar sesión?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Cerrar Sesión', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
   final CollectionReference _activities =
   FirebaseFirestore.instance.collection('activities');
   int _currentIndex = 0;
@@ -24,7 +43,13 @@ class _AdminPageState extends State<AdminPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () => FirebaseAuth.instance.signOut(),
+            onPressed: () async {
+              final shouldLogout = await _showLogoutDialog(context);
+              if (shouldLogout == true) {
+                await FirebaseAuth.instance.signOut();
+                Navigator.pushReplacementNamed(context, '/login');
+              }
+            },
           ),
         ],
       ),
